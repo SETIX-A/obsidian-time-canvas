@@ -1,0 +1,10 @@
+{
+	"id": "time-canvas",
+	"name": "Time Canvas",
+	"version": "1.0.0",
+	"minAppVersion": "1.7.2",
+	"description": "Revisit your past: surface notes written on this day in previous years as collapsible cards in the sidebar.",
+	"author": "Setix",
+	"authorUrl": "https://github.com/SETIX-A",
+	"isDesktopOnly": false
+}
