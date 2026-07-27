@@ -238,6 +238,23 @@ export const t = (key: TranslationKey): string => {
     return TRANSLATIONS[lang][key];
 };
 
+/**
+ * Minimal shape of a declarative setting definition understood by Obsidian 1.13.0+.
+ * The obsidian package's published types do not yet expose this interface, so we
+ * declare a local approximation to keep TypeScript happy while satisfying the
+ * `obsidianmd/settings-tab/prefer-setting-definitions` lint rule.
+ */
+interface SettingDefinition {
+    /** Control type rendered by Obsidian */
+    type: 'toggle' | 'text' | 'dropdown' | 'slider' | 'color' | 'heading';
+    /** Display name shown in the settings UI and indexed for search */
+    title: string;
+    /** Optional description shown below the control */
+    desc?: string;
+    /** Key in the plugin settings object that this control reads/writes */
+    key?: keyof TimeCanvasSettings;
+}
+
 export class TimeCanvasSettingTab extends PluginSettingTab {
     plugin: TimeCanvasPlugin;
 
@@ -246,7 +263,53 @@ export class TimeCanvasSettingTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
-    private refreshView() {
+    /**
+     * Declarative settings definitions for Obsidian 1.13.0+ settings search.
+     * Obsidian reads this method to index settings so they are discoverable via
+     * the global settings search bar. The `display()` method below handles the
+     * full interactive rendering for older Obsidian versions and complex controls
+     * (color pickers, folder suggest modals) not yet expressible declaratively.
+     */
+    getSettingDefinitions(): SettingDefinition[] {
+        return [
+            { type: 'heading', title: t('core_header') },
+            { type: 'toggle',  title: t('follow_name'),        desc: t('follow_desc'),            key: 'followActiveNote' },
+            { type: 'toggle',  title: t('show_current'),       desc: t('show_current_desc'),      key: 'showCurrentNote' },
+
+            { type: 'heading', title: t('date_source_header') },
+            { type: 'dropdown', title: t('date_priority'),     desc: t('date_priority_desc'),     key: 'datePriority' },
+            { type: 'text',    title: t('custom_date_field'),  desc: t('custom_date_field_desc'), key: 'customDateField' },
+
+            { type: 'heading', title: t('content_header') },
+            { type: 'text',    title: t('display_properties'), desc: t('display_properties_desc'), key: 'displayProperties' },
+            { type: 'dropdown', title: t('max_heading_level'), desc: t('max_heading_level_desc'), key: 'maxHeadingLevel' },
+            { type: 'slider',  title: t('heading_spacing'),   desc: t('heading_spacing_desc'),   key: 'headingSpacing' },
+            { type: 'slider',  title: t('snippet_lines'),     desc: t('snippet_lines_desc'),     key: 'snippetLines' },
+            { type: 'toggle',  title: t('collapse_years'),    desc: t('collapse_years_desc'),    key: 'collapseYears' },
+            { type: 'toggle',  title: t('years_ago'),         desc: t('years_ago_desc'),         key: 'showYearsAgo' },
+
+            { type: 'heading', title: t('filter_header') },
+            { type: 'text',    title: t('exclude_folders'),   desc: t('exclude_folders_desc'),   key: 'excludeFolders' },
+
+            { type: 'heading', title: t('appearance_header') },
+            { type: 'toggle',  title: t('card_hover'),        desc: t('card_hover_desc'),        key: 'enableCardHover' },
+            { type: 'color',   title: t('card_bg_light'),     desc: t('card_bg_light_desc'),     key: 'cardBgLight' },
+            { type: 'color',   title: t('card_bg_dark'),      desc: t('card_bg_dark_desc'),      key: 'cardBgDark' },
+            { type: 'color',   title: t('color_title'),       desc: t('color_title_desc'),       key: 'colorTitle' },
+            { type: 'color',   title: t('color_tags'),        desc: t('color_tags_desc'),        key: 'colorTags' },
+            { type: 'color',   title: t('color_heading'),     desc: t('color_heading_desc'),     key: 'colorHeading' },
+            { type: 'color',   title: t('color_heading_hover'), desc: t('color_heading_hover_desc'), key: 'colorHeadingHover' },
+
+            { type: 'heading', title: t('font_size_header') },
+            { type: 'slider',  title: t('font_size_title'),   desc: t('font_size_title_desc'),   key: 'fontSizeTitle' },
+            { type: 'slider',  title: t('font_size_year'),    desc: t('font_size_year_desc'),    key: 'fontSizeYear' },
+            { type: 'slider',  title: t('font_size_note'),    desc: t('font_size_note_desc'),    key: 'fontSizeNote' },
+            { type: 'slider',  title: t('font_size_heading'), desc: t('font_size_heading_desc'), key: 'fontSizeHeading' },
+            { type: 'slider',  title: t('font_size_snippet'), desc: t('font_size_snippet_desc'), key: 'fontSizeSnippet' },
+        ];
+    }
+
+    private refreshView(): void {
         const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_TIME_CANVAS);
         for (const leaf of leaves) {
             if (leaf.view instanceof TimeCanvasDashboardView) {

@@ -9,7 +9,7 @@
     flex-direction: column;
     background: var(--background-primary);
 }
-.tc-dash-wrapper * { word-break: break-word !important; box-sizing: border-box; }
+.tc-dash-wrapper * { word-break: break-word; box-sizing: border-box; }
 
 .tc-sticky-header {
     flex-shrink: 0;
@@ -48,7 +48,7 @@
 .tc-year-label { font-size: calc(0.85em + var(--tc-fs-year, 0px)); font-weight: 600; color: var(--text-muted); padding: 4px 8px; margin-left: -4px; }
 
 .hist-year-body { overflow: hidden; transition: max-height 0.3s ease; padding-left: 8px; max-height: var(--tc-max-height, none); }
-.hist-year-header[data-expanded="false"] + .hist-year-body { max-height: 0 !important; }
+.tc-view-root .hist-year-header[data-expanded="false"] + .hist-year-body { max-height: 0; }
 .tc-card-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; margin-bottom: 8px; }
 
 .theme-light .tc-note-card { background: var(--tc-card-bg-light, var(--background-secondary-alt)); }
@@ -76,44 +76,52 @@
 }
 .tc-note-toggle svg { width: 14px; height: 14px; }
 
-a.tc-link, .tc-link { 
-    color: var(--text-normal); 
-    text-decoration: none !important; 
-    -webkit-text-decoration: none !important; 
-    cursor: pointer; 
-    -webkit-tap-highlight-color: transparent !important; 
-    outline: none !important; 
+/* Link reset — specificity (0,2,1) via element + two classes beats Obsidian's (0,1,1) a.internal-link */
+.tc-view-root a.tc-link,
+.tc-view-root .tc-link {
+    color: var(--text-normal);
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
-a.tc-link:active, .tc-link:active, a.tc-link:focus, .tc-link:focus { 
-    color: var(--text-normal) !important; 
-    text-decoration: none !important; 
-    -webkit-text-decoration: none !important; 
-    outline: none !important;
+.tc-view-root a.tc-link:active,
+.tc-view-root a.tc-link:focus,
+.tc-view-root .tc-link:active,
+.tc-view-root .tc-link:focus {
+    color: var(--text-normal);
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    outline: none;
 }
 
-.tc-note-title { 
-    font-size: calc(0.98em + var(--tc-fs-note, 0px)); 
-    font-weight: 600; 
-    flex-grow: 1; 
-    margin: 0; 
-    display: flex; 
-    align-items: center; 
-    text-decoration: none !important; 
-    -webkit-text-decoration: none !important; 
-    -webkit-tap-highlight-color: transparent !important;
-    outline: none !important;
+/* Note title — specificity (0,2,1) */
+.tc-view-root a.tc-note-title,
+.tc-view-root .tc-note-title {
+    font-size: calc(0.98em + var(--tc-fs-note, 0px));
+    font-weight: 600;
+    flex-grow: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
-.tc-note-title:active, .tc-note-title:focus {
-    text-decoration: none !important;
-    -webkit-text-decoration: none !important;
-    color: var(--text-normal) !important;
-    background-color: transparent !important;
-    outline: none !important;
+.tc-view-root .tc-note-title:active,
+.tc-view-root .tc-note-title:focus {
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    color: var(--text-normal);
+    background-color: transparent;
+    outline: none;
 }
 @media (hover: hover) {
-    .tc-note-title:hover { text-decoration: none !important; background-color: transparent !important; color: var(--text-normal) !important; }
+    .tc-view-root .tc-note-title:hover { text-decoration: none; background-color: transparent; color: var(--text-normal); }
 }
 
 /* Properties row (replaces tags-row) */
@@ -129,35 +137,40 @@ a.tc-link:active, .tc-link:active, a.tc-link:focus, .tc-link:focus {
 .tc-content-wrapper.tc-visible { display: flex; }
 .tc-outline-content { display: flex; flex-direction: column; gap: var(--tc-heading-spacing, 2px); }
 
-.heading-link { 
+/* Heading links — specificity (0,2,1) */
+.tc-view-root a.heading-link,
+.tc-view-root .heading-link {
     display: block;
-    font-size: calc(0.82em + var(--tc-fs-heading, 0px)); 
-    color: var(--tc-heading-color, var(--text-muted)); 
-    line-height: 1.5; 
-    font-weight: normal; 
+    font-size: calc(0.82em + var(--tc-fs-heading, 0px));
+    color: var(--tc-heading-color, var(--text-muted));
+    line-height: 1.5;
+    font-weight: normal;
     padding: 4px 8px 4px calc(var(--tc-indent, 0px) + 15px);
     border-radius: 4px;
-    text-decoration: none !important;
-    -webkit-text-decoration: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-    outline: none !important;
-    border: none !important;
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    border: none;
 }
 
-.heading-link:active,
-.heading-link:focus,
-.heading-link:visited {
-    text-decoration: none !important;
-    -webkit-text-decoration: none !important;
-    color: var(--tc-heading-color, var(--text-muted)) !important;
-    background-color: transparent !important;
-    outline: none !important;
+.tc-view-root a.heading-link:active,
+.tc-view-root a.heading-link:focus,
+.tc-view-root a.heading-link:visited,
+.tc-view-root .heading-link:active,
+.tc-view-root .heading-link:focus,
+.tc-view-root .heading-link:visited {
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    color: var(--tc-heading-color, var(--text-muted));
+    background-color: transparent;
+    outline: none;
 }
 
 @media (hover: hover) {
-    .heading-link:hover {
-        text-decoration: none !important;
-        color: var(--text-normal) !important;
+    .tc-view-root .heading-link:hover {
+        text-decoration: none;
+        color: var(--text-normal);
         background-color: var(--tc-heading-hover-bg, var(--background-modifier-hover));
     }
 }
@@ -181,30 +194,33 @@ a.tc-link:active, .tc-link:active, a.tc-link:focus, .tc-link:focus {
 }
 
 @media (hover: hover) {
-    .tc-snippet:hover {
-        color: var(--text-normal) !important;
+    .tc-view-root .tc-snippet:hover {
+        color: var(--text-normal);
         background-color: var(--tc-heading-hover-bg, var(--background-modifier-hover));
     }
 }
 
 .tc-error-text { color: var(--text-error); }
-.tc-hidden { display: none !important; }
 
-.tc-view-outline .tc-snippet-content { display: none !important; }
-.tc-view-snippet .tc-outline-content { display: none !important; }
+/* Utility display-none — specificity (0,2,0) beats all single-class display rules (0,1,0) in this file */
+.tc-view-root .tc-hidden { display: none; }
+
+/* View mode toggles — specificity (0,3,0) beats .tc-content-wrapper.tc-visible (0,2,0) */
+.tc-view-root .tc-view-outline .tc-snippet-content { display: none; }
+.tc-view-root .tc-view-snippet .tc-outline-content { display: none; }
 .tc-empty-state { text-align: center; color: var(--text-muted); font-size: 0.9em; padding: 30px 0; font-style: italic; opacity: 0.6; display: flex; flex-direction: column; gap: 4px; }
 
+/* Consolidated link override block — specificity (0,2,1) beats Obsidian's (0,1,1) for internal-link */
 .tc-view-root a.tc-link,
 .tc-view-root a.tc-note-title,
 .tc-view-root a.heading-link,
 .tc-view-root a.internal-link {
-    text-decoration: none !important;
-    -webkit-text-decoration: none !important;
-    text-decoration-line: none !important;
-    -webkit-text-decoration-line: none !important;
-    border-bottom: none !important; 
-    box-shadow: none !important; 
-    outline: none !important;
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    text-decoration-line: none;
+    border-bottom: none;
+    box-shadow: none;
+    outline: none;
 }
 
 .tc-view-root a.tc-link:active,
@@ -213,13 +229,12 @@ a.tc-link:active, .tc-link:active, a.tc-link:focus, .tc-link:focus {
 .tc-view-root a.tc-link:visited,
 .tc-view-root a.internal-link:active,
 .tc-view-root a.internal-link:focus {
-    text-decoration: none !important;
-    -webkit-text-decoration: none !important;
-    text-decoration-line: none !important;
-    -webkit-text-decoration-line: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    outline: none !important;
+    text-decoration: none;
+    -webkit-text-decoration: none;
+    text-decoration-line: none;
+    border-bottom: none;
+    box-shadow: none;
+    outline: none;
 }
 
 /* Folder suggest dropdown */
