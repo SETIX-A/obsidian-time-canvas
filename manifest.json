@@ -1,7 +1,7 @@
 {
 	"id": "time-canvas",
 	"name": "Time Canvas",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "1.7.2",
 	"description": "Revisit your past: surface notes written on this day in previous years as collapsible cards in the sidebar.",
 	"author": "Setix",
